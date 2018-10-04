@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SaleModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Cutomers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Oreders">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Product_id" Type="int" />
+    <Property Name="Customer_id" Type="int" />
+    <Property Name="Date" Type="datetime" />
+    <Property Name="Price" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="Amount" Type="int" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Price" Type="decimal" Precision="10" Scale="2" />
+  </EntityType>
+  <Association Name="FK_Oreders_Cutomers">
+    <End Role="Cutomers" Type="Self.Cutomers" Multiplicity="0..1" />
+    <End Role="Oreders" Type="Self.Oreders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cutomers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Oreders">
+        <PropertyRef Name="Customer_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Oreders_Products">
+    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+    <End Role="Oreders" Type="Self.Oreders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Oreders">
+        <PropertyRef Name="Product_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SaleModelStoreContainer">
+    <EntitySet Name="Cutomers" EntityType="Self.Cutomers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Oreders" EntityType="Self.Oreders" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Oreders_Cutomers" Association="Self.FK_Oreders_Cutomers">
+      <End Role="Cutomers" EntitySet="Cutomers" />
+      <End Role="Oreders" EntitySet="Oreders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Oreders_Products" Association="Self.FK_Oreders_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Oreders" EntitySet="Oreders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

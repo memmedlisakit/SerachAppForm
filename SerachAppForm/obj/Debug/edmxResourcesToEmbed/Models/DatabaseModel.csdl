@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SaleModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Cutomer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Oreders" Relationship="Self.FK_Oreders_Cutomers" FromRole="Cutomers" ToRole="Oreders" />
+  </EntityType>
+  <EntityType Name="Oreder">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Product_id" Type="Int32" />
+    <Property Name="Customer_id" Type="Int32" />
+    <Property Name="Date" Type="DateTime" Precision="3" />
+    <Property Name="Price" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Amount" Type="Int32" />
+    <NavigationProperty Name="Cutomer" Relationship="Self.FK_Oreders_Cutomers" FromRole="Oreders" ToRole="Cutomers" />
+    <NavigationProperty Name="Product" Relationship="Self.FK_Oreders_Products" FromRole="Oreders" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Decimal" Precision="10" Scale="2" />
+    <NavigationProperty Name="Oreders" Relationship="Self.FK_Oreders_Products" FromRole="Products" ToRole="Oreders" />
+  </EntityType>
+  <Association Name="FK_Oreders_Cutomers">
+    <End Role="Cutomers" Type="Self.Cutomer" Multiplicity="0..1" />
+    <End Role="Oreders" Type="Self.Oreder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cutomers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Oreders">
+        <PropertyRef Name="Customer_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Oreders_Products">
+    <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="Oreders" Type="Self.Oreder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Oreders">
+        <PropertyRef Name="Product_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SaleEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Cutomers" EntityType="Self.Cutomer" />
+    <EntitySet Name="Oreders" EntityType="Self.Oreder" />
+    <EntitySet Name="Products" EntityType="Self.Product" />
+    <AssociationSet Name="FK_Oreders_Cutomers" Association="Self.FK_Oreders_Cutomers">
+      <End Role="Cutomers" EntitySet="Cutomers" />
+      <End Role="Oreders" EntitySet="Oreders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Oreders_Products" Association="Self.FK_Oreders_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Oreders" EntitySet="Oreders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
